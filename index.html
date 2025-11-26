@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>killerwhales_user | Validator Identity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #050505;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --accent: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* --- BACKGROUND FLUID EFFECT (CSS ONLY) --- */
+        .ambient-light {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 150vw; height: 150vw;
+            background: radial-gradient(circle, rgba(60, 20, 180, 0.15) 0%, rgba(0,0,0,0) 60%);
+            transform: translate(-50%, -50%);
+            z-index: -2;
+            animation: pulse-light 10s infinite alternate;
+        }
+
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- LAYOUT --- */
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 1. HEADER */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+
+        .brand {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+        }
+
+        .status-indicator {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);
+        }
+        .dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; box-shadow: 0 0 10px rgba(255,255,255,0.8); }
+
+        /* 2. HERO SECTION */
+        .hero {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 4rem;
+            align-items: flex-end;
+            margin-bottom: 6rem;
+        }
+
+        h1 {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 300; /* Thin look */
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.1;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1rem; color: var(--text-muted); line-height: 1.8;
+            border-left: 1px solid var(--border);
+            padding-left: 2rem;
+        }
+
+        /* 3. DATA BLOCKS (The Addresses) */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1px; /* Gap for border effect */
+            background: var(--border); /* Creates the border color */
+            border: 1px solid var(--border);
+        }
+
+        .data-card {
+            background: var(--bg);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+            transition: background 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-card:hover {
+            background: #0a0a0a;
+        }
+
+        /* Hover Reveal Effect */
+        .data-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: #fff; transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+        }
+        .data-card:hover::before { transform: scaleX(1); }
+
+        .card-label {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 0.7rem; color: var(--text-muted);
+            text-transform: uppercase; margin-bottom: 1rem;
+        }
+
+        .card-value {
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.2rem; color: #fff;
+            word-break: break-all;
+        }
+
+        .card-meta {
+            margin-top: auto; padding-top: 1rem;
+            font-size: 0.75rem; color: #444;
+            display: flex; justify-content: space-between;
+        }
+
+        /* 4. FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.75rem; color: #333;
+            text-transform: uppercase; letter-spacing: 2px;
+            margin-top: auto;
+        }
+
+        /* ANIMATIONS */
+        @keyframes pulse-light {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.2; }
+        }
+
+        .fade-in {
+            opacity: 0; transform: translateY(20px);
+            animation: fadeUp 1s ease forwards;
+        }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero { grid-template-columns: 1fr; gap: 2rem; }
+            .hero-desc { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 2rem; }
+            h1 { font-size: 2.2rem; }
+            .data-card { padding: 1.5rem; min-height: auto; }
+            .wrapper { padding: 2rem 1.5rem; }
+            nav { margin-bottom: 4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+    <div class="ambient-light"></div>
+
+    <div class="wrapper">
+        
+        <nav class="fade-in">
+            <div class="brand">killerwhales_user</div>
+            <div class="status-indicator">
+                <div class="dot"></div>
+                System Active
+            </div>
+        </nav>
+
+        <main class="hero">
+            <h1 class="fade-in delay-1">
+                Immutable infrastructure for decentralized consensus.
+            </h1>
+            <div class="hero-desc fade-in delay-1">
+                Operating high-availability validator nodes. <br>
+                Secured by institutional-grade hardware.<br>
+                Committed to network uptime and integrity.
+            </div>
+        </main>
+
+        <section class="data-grid fade-in delay-2">
+            
+            <div class="data-card">
+                <div>
+                    <div class="card-label">01 // Processing Center</div>
+                    <div class="card-value">killerwhales.sats</div>
+                </div>
+                <div class="card-meta">
+                    <span>STATUS: ONLINE</span>
+                    <span>TYPE: CORE</span>
+                </div>
+            </div>
+
+            <div class="data-card">
+                <div>
+                    <div class="card-label">02 // Research Lab</div>
+                    <div class="card-value">killerwhaleslabs.sats</div>
+                </div>
+                <div class="card-meta">
+                    <span>STATUS: PRIVATE</span>
+                    <span>TYPE: DEV</span>
+                </div>
+            </div>
+
+            <div class="data-card">
+                <div>
+                    <div class="card-label">03 // Current Version</div>
+                    <div class="card-value">v.4.2.0</div>
+                </div>
+                <div class="card-meta">
+                    <span>BUILD: STABLE</span>
+                    <span>REGION: GLOBAL</span>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <footer>
+        killerwhales_user infrastructure
+    </footer>
+
+</body>
+</html>
